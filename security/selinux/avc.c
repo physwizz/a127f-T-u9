@@ -1071,6 +1071,14 @@ static noinline int avc_denied(struct selinux_state *state,
 
 	}
 #endif
+
+
+#ifdef CONFIG_SECURITY_SELINUX_ALWAYS_ENFORCE
+	if (!(avd->flags & AVD_FLAGS_PERMISSIVE))
+#else
+	if (selinux_enforcing && !(avd->flags & AVD_FLAGS_PERMISSIVE))
+#endif
+
 // ] SEC_SELINUX_PORTING_COMMON
 
 	if (selinux_enforcing &&

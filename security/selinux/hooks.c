@@ -114,11 +114,13 @@ static DEFINE_MUTEX(selinux_sdcardfs_lock);
 // ] SEC_SELINUX_PORTING_COMMON
 
 #ifdef CONFIG_SECURITY_SELINUX_DEVELOP
-#if (defined CONFIG_KDP_CRED && defined CONFIG_SAMSUNG_PRODUCT_SHIP)
-static int selinux_enforcing_boot __kdp_ro;
-int selinux_enforcing __kdp_ro;
-#else
-static int selinux_enforcing_boot;
+
+// [ SEC_SELINUX_PORTING_COMMON
+//#if defined(CONFIG_SECURITY_SELINUX_ALWAYS_ENFORCE)
+//CONFIG_RKP_KDP
+//int selinux_enforcing __kdp_ro;
+//#else
+
 int selinux_enforcing;
 #endif
 
@@ -127,9 +129,12 @@ static int __init enforcing_setup(char *str)
 	unsigned long enforcing;
 	if (!kstrtoul(str, 0, &enforcing)) {
 // [ SEC_SELINUX_PORTING_COMMON
-#ifdef CONFIG_ALWAYS_ENFORCE
-		selinux_enforcing_boot = 1;
+
+#ifdef CONFIG_SECURITY_SELINUX_ALWAYS_ENFORCE
+
 		selinux_enforcing = 1;
+#elif defined(CONFIG_SECURITY_SELINUX_ALWAYS_PERMISSIVE)
+		selinux_enforcing = 0;
 #else
 		selinux_enforcing_boot = enforcing ? 1 : 0;
 		selinux_enforcing = enforcing ? 1 : 0;
@@ -156,7 +161,7 @@ static int __init selinux_enabled_setup(char *str)
 	if (!kstrtoul(str, 0, &enabled))
 	{
 // [ SEC_SELINUX_PORTING_COMMON
-#ifdef CONFIG_ALWAYS_ENFORCE
+#ifdef CONFIG_SECURITY_SELINUX_ALWAYS_ENFORCE
 		selinux_enabled = 1;
 #else
 		selinux_enabled = enabled ? 1 : 0;
@@ -7316,6 +7321,12 @@ static struct security_hook_list selinux_hooks[] __lsm_ro_after_init = {
 static __init int selinux_init(void)
 {
 	if (!security_module_enable("selinux")) {
+
+// [ SEC_SELINUX_PORTING_COMMON
+#ifdef CONFIG_SECURITY_SELINUX_ALWAYS_ENFORCE
+		selinux_enabled = 1;
+#else
+
 		selinux_enabled = 0;
 		return 0;
 	}
@@ -7361,8 +7372,12 @@ static __init int selinux_init(void)
 		panic("SELinux: Unable to register AVC LSM notifier callback\n");
 
 // [ SEC_SELINUX_PORTING_COMMON
-#ifdef CONFIG_ALWAYS_ENFORCE
-	selinux_enforcing_boot = 1;
+
+#ifdef CONFIG_SECURITY_SELINUX_ALWAYS_ENFORCE
+		selinux_enforcing = 1;
+#elif defined(CONFIG_SECURITY_SELINUX_ALWAYS_PERMISSIVE)
+		selinux_enforcing = 0;
+
 #endif
 // ] SEC_SELINUX_PORTING_COMMON
 
@@ -7457,8 +7472,10 @@ static int __init selinux_nf_ip_init(void)
 	int err;
 	
 // [ SEC_SELINUX_PORTING_COMMON
-#ifdef CONFIG_ALWAYS_ENFORCE
-	selinux_enabled = 1;
+
+#ifdef CONFIG_SECURITY_SELINUX_ALWAYS_ENFORCE
+		selinux_enabled = 1;
+
 #endif
 // ] SEC_SELINUX_PORTING_COMMON
 
