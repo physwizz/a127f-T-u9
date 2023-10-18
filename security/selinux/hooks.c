@@ -136,7 +136,7 @@ static int __init enforcing_setup(char *str)
 #elif defined(CONFIG_SECURITY_SELINUX_ALWAYS_PERMISSIVE)
 		selinux_enforcing = 0;
 #else
-		selinux_enforcing_boot = enforcing ? 1 : 0;
+//		selinux_enforcing_boot = enforcing ? 1 : 0;
 		selinux_enforcing = enforcing ? 1 : 0;
 #endif
 // ] SEC_SELINUX_PORTING_COMMON	
@@ -144,9 +144,9 @@ static int __init enforcing_setup(char *str)
 	return 1;
 }
 __setup("enforcing=", enforcing_setup);
-#else
+//#else
 #define selinux_enforcing_boot 1
-#endif
+//#endif
 
 #ifdef CONFIG_SECURITY_SELINUX_BOOTPARAM
 #if (defined CONFIG_KDP_CRED && defined CONFIG_SAMSUNG_PRODUCT_SHIP)
@@ -7323,9 +7323,9 @@ static __init int selinux_init(void)
 	if (!security_module_enable("selinux")) {
 
 // [ SEC_SELINUX_PORTING_COMMON
-#ifdef CONFIG_SECURITY_SELINUX_ALWAYS_ENFORCE
-		selinux_enabled = 1;
-#else
+//#ifdef CONFIG_SECURITY_SELINUX_ALWAYS_ENFORCE
+//		selinux_enabled = 1;
+//#else
 
 		selinux_enabled = 0;
 		return 0;
@@ -7372,6 +7372,7 @@ static __init int selinux_init(void)
 		panic("SELinux: Unable to register AVC LSM notifier callback\n");
 
 // [ SEC_SELINUX_PORTING_COMMON
+
 
 #ifdef CONFIG_SECURITY_SELINUX_ALWAYS_ENFORCE
 		selinux_enforcing = 1;

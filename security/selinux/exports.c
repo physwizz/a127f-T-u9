@@ -25,5 +25,6 @@ bool selinux_is_enabled(void)
 #else
 
 	return selinux_enabled;
+#endif
 }
 EXPORT_SYMBOL_GPL(selinux_is_enabled);
