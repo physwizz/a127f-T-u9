@@ -323,7 +323,7 @@ ARCH		?=arm64
 # CROSS_COMPILE= $(srctree)/toolchain/gcc/linux-x86/aarch64/aarch64-linux-android-4.9/bin/aarch64-linux-android-
 
 
-CROSS_COMPILE=/home/grahame/toolchains/aarch64-linux-android-4.9-master/bin/aarch64-linux-android-
+CROSS_COMPILE=/home/grahame/toolchains/gcc/linux-x86/aarch64/aarch64-linux-android-4.9/bin/aarch64-linux-android-
 
 
 # Architecture as present in compile.h
@@ -375,10 +375,10 @@ KBUILD_HOSTLDLIBS   := $(HOST_LFS_LIBS) $(HOSTLDLIBS)
 # Make variables (CC, etc...)
 AS		= $(CROSS_COMPILE)as
 LD		= $(CROSS_COMPILE)ld
-# CC              = $(srctree)/toolchain/clang/host/linux-x86/clang-r353983c/bin/clang
+CC              = $(srctree)/toolchain/clang/host/linux-x86/clang-r353983c/bin/clang
 
 
-CC=/home/grahame/toolchains/clang-r353983c/clang-r353983c1-master/bin/clang
+# CC=/home/grahame/toolchains/clang-r353983c/clang-r353983c1-master/bin/clang
 
 CPP		= $(CC) -E
 AR		= $(CROSS_COMPILE)ar
